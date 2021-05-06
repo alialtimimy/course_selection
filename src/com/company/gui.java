@@ -27,6 +27,8 @@ public class gui extends Main implements ActionListener, MouseListener {
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 800;
     private BufferedImage myPicture, myPicture1, myPicture2, myPicture3, myPicture4, myPicture5;
+    private ArrayList<MouseListener> mouseListeners = new ArrayList<>();
+    private ArrayList<String> courses;
 
 
     public gui()  {
@@ -165,7 +167,7 @@ public class gui extends Main implements ActionListener, MouseListener {
         panel2.setBounds(0, 0, WIDTH, HEIGHT);
         panel2.setBackground(new Color(17,44,80));
         panel2.setLayout(null);
-        ArrayList<String> courses = get(major);
+        courses = get(major);
         String course = "";
         JLabel label2 = null;
         int y = 50;
@@ -194,6 +196,7 @@ public class gui extends Main implements ActionListener, MouseListener {
 
     public void actionPerformed(ActionEvent e) {
         //add true and false statement
+        for(int i = 0; i<courses.)
         if (e.getSource() == button) {
             try {
                 panel2.setVisible(false);
