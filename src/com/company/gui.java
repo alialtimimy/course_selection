@@ -8,6 +8,7 @@ import me.xdrop.fuzzywuzzy.FuzzySearch;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -21,11 +22,12 @@ import java.util.HashMap;
 
 public class gui extends Main implements ActionListener, MouseListener {
     private static JFrame frame;
-    private static JLabel label, label3, label2, info,courseInfoTitle, indexForDegree1,electiveTitle, indexForDegree2, indexForDegree3, indexForDegree4, indexForDegree5, enter, errorMessage, css, css1, css2, generalDegree, honoursDegree, picLabel, picLabel1, picLabel2, picLabel3, picLabel4, picLabel5, electiveLabel;
+    private static JLabel label, info,courseInfoTitle,enter, errorMessage, css, css1, css2, generalDegree, honoursDegree, picLabel, picLabel1, picLabel2, picLabel3, picLabel4, picLabel5, electiveLabel;
     private static ArrayList<JLabel> array;
+    private JLabel[] jLabelArr = new JLabel[3];
+    private JLabel[] jLabelArr1 = new JLabel[100];
     private static JPanel panel1, panel2, panel3, panel4;
     private static JButton button, button1, button2;
-    JTextField textField;
     private static String major = "";
     private static ArrayList<String> degrees = new ArrayList<String>();
     private static final int WIDTH = 1000;
@@ -98,8 +100,8 @@ public class gui extends Main implements ActionListener, MouseListener {
         panel1.add(picLabel5);
 
         //Initialize label
-        label = new JLabel("Enter major:");
-        label.setBounds(230, 300, 300, 40);
+        label = new JLabel("Select A Major:");
+        label.setBounds(205, 145, 190, 43);
         label.setForeground(new Color(255, 203, 0));
         label.setFont(new Font("Arial", Font.BOLD, 23));
         panel1.add(label);
@@ -123,72 +125,37 @@ public class gui extends Main implements ActionListener, MouseListener {
         panel1.add(css2);
 
 
-        //Initialize textfield
-        textField = new JTextField(20);
-        textField.setBounds(380, 308, 300, 25);
-        textField.addActionListener(this);
-        panel1.add(textField);
-        enter = new JLabel("Enter one of the following degrees:");
-        enter.setBounds(205, 50, 450, 40);
-        enter.setForeground(new Color(255, 199, 0));
-        enter.setFont(new Font("Arial", Font.BOLD, 25));
-        panel1.add(enter);
 
         //panel1 for major listing and enter
         //panel for textfield and enter major
         addDegree();
-        int y = 130;
+        int y = 220;
         array = new ArrayList<JLabel>();
+        int r = 0;
         for (int i = 2; i < 5; i++) {
             y = y + 25;
-            label3 = new JLabel(degreeNames.get(i));
-            label3.addMouseListener(this);
-            label3.setForeground(new Color(255, 199, 0));
-            label3.setBounds(205, y, 1000, label3.getMaximumSize().height);
-            label3.setFont(new Font("Arial", Font.BOLD, 16));
-            array.add(label3);
+            jLabelArr[r] = new JLabel(degreeNames.get(i));
+            jLabelArr[r].addMouseListener(this);
+            jLabelArr[r].setForeground(new Color(255, 199, 0));
+            jLabelArr[r].setBounds(205, y, 1000,40);
+            jLabelArr[r].setFont(new Font("Arial", Font.BOLD, 17));
+            array.add(jLabelArr[r]);
+            r++;
         }
-        indexForDegree1 = new JLabel("= 1");
-        indexForDegree2 = new JLabel("= 2");
-        indexForDegree3 = new JLabel("= 3");
-        indexForDegree4 = new JLabel("= 4");
-        indexForDegree5 = new JLabel("= 5");
 
-        indexForDegree1.setForeground(new Color(255, 199, 0));
-        indexForDegree1.setBounds(525, 107, 100, indexForDegree1.getMaximumSize().height);
-        indexForDegree1.setFont(new Font("Arial", Font.BOLD, 16));
-        panel1.add(indexForDegree1);
-
-        indexForDegree2.setForeground(new Color(255, 199, 0));
-        indexForDegree2.setBounds(530, 132, 100, indexForDegree2.getMaximumSize().height);
-        indexForDegree2.setFont(new Font("Arial", Font.BOLD, 16));
-        panel1.add(indexForDegree2);
-
-        indexForDegree3.setForeground(new Color(255, 199, 0));
-        indexForDegree3.setBounds(680, 157, 100, indexForDegree3.getMaximumSize().height);
-        indexForDegree3.setFont(new Font("Arial", Font.BOLD, 16));
-        panel1.add(indexForDegree3);
-
-        indexForDegree4.setForeground(new Color(255, 199, 0));
-        indexForDegree4.setBounds(690, 182, 100, indexForDegree4.getMaximumSize().height);
-        indexForDegree4.setFont(new Font("Arial", Font.BOLD, 16));
-        panel1.add(indexForDegree4);
-
-        indexForDegree5.setForeground(new Color(255, 199, 0));
-        indexForDegree5.setBounds(906, 207, 100, indexForDegree5.getMaximumSize().height);
-        indexForDegree5.setFont(new Font("Arial", Font.BOLD, 16));
-        panel1.add(indexForDegree5);
 
 
         generalDegree = new JLabel(degreeNames.get(0));
+        generalDegree.addMouseListener(this);
         generalDegree.setForeground(new Color(255, 199, 0));
-        generalDegree.setFont(new Font("Arial", Font.BOLD, 16));
-        generalDegree.setBounds(205, 105, generalDegree.getMaximumSize().width, generalDegree.getMaximumSize().height);
+        generalDegree.setFont(new Font("Arial", Font.BOLD, 17));
+        generalDegree.setBounds(205, 195, generalDegree.getMaximumSize().width, 40);
 
         honoursDegree = new JLabel(degreeNames.get(1));
+        honoursDegree.addMouseListener(this);
         honoursDegree.setForeground(new Color(255, 199, 0));
-        honoursDegree.setFont(new Font("Arial", Font.BOLD, 16));
-        honoursDegree.setBounds(205, 130, honoursDegree.getMaximumSize().width, generalDegree.getMaximumSize().height);
+        honoursDegree.setFont(new Font("Arial", Font.BOLD, 17));
+        honoursDegree.setBounds(205, 220, honoursDegree.getMaximumSize().width, 40);
 
         array.add(generalDegree);
         array.add(honoursDegree);
@@ -208,7 +175,6 @@ public class gui extends Main implements ActionListener, MouseListener {
         courses = get(major);
         courseLabels = new ArrayList<JLabel>();
         String course = "";
-        JLabel label2 = null;
         int y = 50;
         if(major.equals("computer_science_honours")){
             courseTitle = new JLabel(degreeNames.get(1));
@@ -245,16 +211,15 @@ public class gui extends Main implements ActionListener, MouseListener {
             courseTitle.setBounds(70, 25, courseTitle.getMaximumSize().width, courseTitle.getMaximumSize().height);
             panel2.add(courseTitle);
         }
-
         for (int i = 0; i < courses.size(); i += 2) {
             course = courses.get(i) + " " + courses.get(i + 1);
             y = y + 25;
-            label2 = new JLabel(course);
-            label2.setForeground(new Color(255, 203, 0));
-            label2.setFont(new Font("Arial", Font.PLAIN, 15));
-            label2.setBounds(85, y, label2.getMaximumSize().width, label2.getMaximumSize().height);
-            courseLabels.add(label2);
-            panel2.add(label2);
+            jLabelArr1[i] = new JLabel(course);
+            jLabelArr1[i].setForeground(new Color(255, 203, 0));
+            jLabelArr1[i].setFont(new Font("Arial", Font.PLAIN, 15));
+            jLabelArr1[i].setBounds(85, y, jLabelArr1[i].getMaximumSize().width, jLabelArr1[i].getMaximumSize().height);
+            courseLabels.add(jLabelArr1[i]);
+            panel2.add(jLabelArr1[i]);
         }
         for (int i = 0; i < courseLabels.size(); i++) {
             courseLabels.get(i).addMouseListener(this);
@@ -395,7 +360,6 @@ public class gui extends Main implements ActionListener, MouseListener {
                     panel3.add(extraTitle2);
                 }
         }
-
         info = new JLabel("<html>" + infoOnCourses.get(label4.getText().substring(0, 9)) + "</html>");
         info.setForeground(new Color(255, 203, 0));
         info.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -404,11 +368,7 @@ public class gui extends Main implements ActionListener, MouseListener {
         panel3.add(courseInfoTitle);
         picLabel.setBounds(750, 550, 200, 200);
         panel3.add(picLabel);
-
-
         frame.add(panel3);
-
-
     }
 
     public void makePanel4() throws Exception {
@@ -431,7 +391,6 @@ public class gui extends Main implements ActionListener, MouseListener {
 
 //        electiveTitle = new JLabel("");
 //        electiveTitle.
-        System.out.println(electives.get(0));
         for(int i = 0 ; i<electives.size(); i+=2){
             electiveLabel = new JLabel(electives.get(i) + " " + electives.get(i+1));
             electiveLabel.setForeground(new Color(255, 203, 0));
@@ -485,28 +444,6 @@ public class gui extends Main implements ActionListener, MouseListener {
             }
         }
         //when the user enters his major:
-        if (e.getSource() == textField) {
-            major = textField.getText();
-            major = degrees.get(Integer.parseInt(major) - 1);
-            try {
-                if (get(major) != null) {
-                    panel1.setVisible(false);
-                    frame.remove(panel1);
-                    makePanel2(major);
-                } else {
-                    errorMessage = new JLabel("Error! Please enter a valid entry.");
-                    errorMessage.setBounds(350, 350, 300, 25);
-                    errorMessage.setForeground(Color.RED);
-                    errorMessage.setFont(new Font("Arial", Font.PLAIN, 15));
-                    panel1.add(errorMessage);
-                    panel1.repaint();
-                }
-//                createTable();
-//                post(get(major));
-            } catch (Exception exception) {
-                System.out.println(exception);
-            }
-        }
     }
 
     public void addDegree() {
@@ -533,14 +470,60 @@ public class gui extends Main implements ActionListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        for (int r = 0; r < jLabelArr1.length; r++) {
+            if (e.getSource() == jLabelArr1[r]) {
+                panel2.setVisible(false);
+                frame.remove(panel2);
+                try {
+                    makePanel3(jLabelArr1[r]);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            if (e.getSource() == jLabelArr[i]) {
+                major = jLabelArr[i].getText();
+                System.out.println(major);
+                try {
+                    if (get(major) != null) {
+                        panel1.setVisible(false);
+                        frame.remove(panel1);
+                        makePanel2(major);
+                    }
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        }
+        if(e.getSource() == generalDegree){
+            major = generalDegree.getText();
+            System.out.println(major);
+            try {
+                if (get(major) != null) {
+                    panel1.setVisible(false);
+                    frame.remove(panel1);
+                    makePanel2(major);
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
 
-            panel2.setVisible(false);
-            frame.remove(panel2);
+        }
+        if(e.getSource() == honoursDegree){
+            major = honoursDegree.getText();
+            System.out.println(major);
 
-        try {
-            makePanel3((JLabel) e.getSource());
-        } catch (Exception exception) {
-            exception.printStackTrace();
+            try {
+                if (get(major) != null) {
+                    panel1.setVisible(false);
+                    frame.remove(panel1);
+                    makePanel2(major);
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+
         }
     }
 

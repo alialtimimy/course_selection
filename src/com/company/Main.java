@@ -12,6 +12,22 @@ public class Main {
 
 
     public static ArrayList<String> get(String table) throws Exception{
+        if(table.equals("Bachelor of Computer Science (General)")){
+            table = "computer_science_general";
+        }
+        else if(table.equals("Bachelor of Computer Science (Honours)")){
+            table = "computer_science_honours";
+        }
+        else if(table.equals("Bachelor of Science (Honours Computer Science with Software Engineering Specialization)")){
+            table = "computer_science_software_engineering";
+        }
+        else if(table.equals("Bachelor of Science (Honours Computer Information Systems)")){
+            table = "computer_science_information_systems";
+        }
+        else if(table.equals("Bachelor of Computer Science (Honours Applied Computing)")){
+            table = "computer_science_applied_computing";
+        }
+
         try {
             Connection con = getConnection();
             PreparedStatement statement = con.prepareStatement("SELECT course_code, course_name FROM " + table);
@@ -29,20 +45,20 @@ public class Main {
     //electives
     public static ArrayList<String> getElectives(String table) throws Exception{
         try {
-            if(table.equals("computer_science_general")){
+            if(table.equals("Bachelor of Computer Science (General)")){
                 table = "general_electives";
             }
-            else if(table.equals("computer_science_honours")){
+            else if(table.equals("Bachelor of Computer Science (Honours)")){
                 table = "honours_electives";
             }
-            else if(table.equals("computer_science_applied_computing")){
-                table = "applied_electives";
-            }
-            else if(table.equals("computer_science_software_engineering")){
+            else if(table.equals("Bachelor of Science (Honours Computer Science with Software Engineering Specialization)")){
                 table = "software_electives";
             }
-            else if(table.equals("computer_science_information_systems")){
+            else if(table.equals("Bachelor of Science (Honours Computer Information Systems)")){
                 table = "information_electives";
+            }
+            else if(table.equals("Bachelor of Computer Science (Honours Applied Computing)")){
+                table = "applied_electives";
             }
 
             Connection con = getConnection();
@@ -61,6 +77,22 @@ public class Main {
     public static HashMap getInfoOnCourse(String table) throws Exception{
         HashMap<String, String> map = new HashMap<String, String>();
         try {
+            if(table.equals("Bachelor of Computer Science (General)")){
+                table = "course_info_general";
+            }
+            else if(table.equals("Bachelor of Computer Science (Honours)")){
+                table = "course_info_honours";
+            }
+            else if(table.equals("Bachelor of Science (Honours Computer Science with Software Engineering Specialization)")){
+                table = "course_info_software";
+            }
+            else if(table.equals("Bachelor of Science (Honours Computer Information Systems)")){
+                table = "course_info_information";
+            }
+            else if(table.equals("Bachelor of Computer Science (Honours Applied Computing)")){
+                table = "course_info_applied";
+            }
+
             if(table.equals("computer_science_general")){
                 table = "course_info_general";
             }
