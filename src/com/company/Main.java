@@ -18,9 +18,6 @@ public class Main {
             ResultSet result = statement.executeQuery();
             ArrayList<String> array = new ArrayList<String>();
             while(result.next()){
-//                System.out.print(result.getString("course_code"));
-//                System.out.print(" ");
-//                System.out.println(result.getString("course_name"));
                 array.add(result.getString("course_code"));
                 array.add(result.getString("course_name"));
             }
@@ -28,9 +25,41 @@ public class Main {
         } catch(Exception e) { System.out.println(e); }
         return null;
     }
+
+    //electives
+    public static ArrayList<String> getElectives(String table) throws Exception{
+        try {
+            if(table.equals("computer_science_general")){
+                table = "general_electives";
+            }
+            else if(table.equals("computer_science_honours")){
+                table = "honours_electives";
+            }
+            else if(table.equals("computer_science_applied_computing")){
+                table = "applied_electives";
+            }
+            else if(table.equals("computer_science_software_engineering")){
+                table = "software_electives";
+            }
+            else if(table.equals("computer_science_information_systems")){
+                table = "information_electives";
+            }
+
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT course, course_name FROM " + table);
+            ResultSet result = statement.executeQuery();
+            ArrayList<String> array = new ArrayList<String>();
+            while(result.next()){
+                array.add(result.getString("course"));
+                array.add(result.getString("course_name"));
+            }
+            return array;
+        } catch(Exception e) { System.out.println(e); }
+        return null;
+    }
+
     public static HashMap getInfoOnCourse(String table) throws Exception{
         HashMap<String, String> map = new HashMap<String, String>();
-        System.out.println(table);
         try {
             if(table.equals("computer_science_general")){
                 table = "course_info_general";

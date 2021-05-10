@@ -2,6 +2,7 @@ package com.company;
 
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import javafx.scene.layout.Background;
+import keeptoo.KButton;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 
 import javax.imageio.ImageIO;
@@ -20,10 +21,10 @@ import java.util.HashMap;
 
 public class gui extends Main implements ActionListener, MouseListener {
     private static JFrame frame;
-    private static JLabel label, label2, label3, info,courseInfoTitle, indexForDegree1, indexForDegree2, indexForDegree3, indexForDegree4, indexForDegree5, enter, errorMessage, css, css1, css2, generalDegree, honoursDegree, picLabel, picLabel1, picLabel2, picLabel3, picLabel4, picLabel5;
+    private static JLabel label, label3, label2, info,courseInfoTitle, indexForDegree1,electiveTitle, indexForDegree2, indexForDegree3, indexForDegree4, indexForDegree5, enter, errorMessage, css, css1, css2, generalDegree, honoursDegree, picLabel, picLabel1, picLabel2, picLabel3, picLabel4, picLabel5, electiveLabel;
     private static ArrayList<JLabel> array;
-    private static JPanel panel1, panel2, panel3;
-    private static JButton button, button1;
+    private static JPanel panel1, panel2, panel3, panel4;
+    private static JButton button, button1, button2;
     JTextField textField;
     private static String major = "";
     private static ArrayList<String> degrees = new ArrayList<String>();
@@ -34,6 +35,7 @@ public class gui extends Main implements ActionListener, MouseListener {
     private static ArrayList<JLabel> courseLabels;
     private static ArrayList<String> degreeNames = new ArrayList<String>();
     private HashMap<String, String> infoOnCourses;
+    private KButton electiveButton;
 
 
     public gui() {
@@ -140,6 +142,7 @@ public class gui extends Main implements ActionListener, MouseListener {
         for (int i = 2; i < 5; i++) {
             y = y + 25;
             label3 = new JLabel(degreeNames.get(i));
+            label3.addMouseListener(this);
             label3.setForeground(new Color(255, 199, 0));
             label3.setBounds(205, y, 1000, label3.getMaximumSize().height);
             label3.setFont(new Font("Arial", Font.BOLD, 16));
@@ -198,6 +201,7 @@ public class gui extends Main implements ActionListener, MouseListener {
 
     public void makePanel2(String major) throws Exception {
         panel2 = new JPanel();
+        JLabel courseTitle;
         panel2.setBounds(0, 0, WIDTH, HEIGHT);
         panel2.setBackground(new Color(17, 44, 80));
         panel2.setLayout(null);
@@ -206,25 +210,80 @@ public class gui extends Main implements ActionListener, MouseListener {
         String course = "";
         JLabel label2 = null;
         int y = 50;
+        if(major.equals("computer_science_honours")){
+            courseTitle = new JLabel(degreeNames.get(1));
+            courseTitle.setForeground(new Color(255, 199, 0));
+            courseTitle.setFont(new Font("Arial", Font.BOLD, 25));
+            courseTitle.setBounds(85, 25, courseTitle.getMaximumSize().width, courseTitle.getMaximumSize().height);
+            panel2.add(courseTitle);
+        }
+        else if(major.equals("computer_science_general")){
+            courseTitle = new JLabel(degreeNames.get(0));
+            courseTitle.setForeground(new Color(255, 199, 0));
+            courseTitle.setFont(new Font("Arial", Font.BOLD, 25));
+            courseTitle.setBounds(85, 25, courseTitle.getMaximumSize().width, courseTitle.getMaximumSize().height);
+            panel2.add(courseTitle);
+        }
+        else if(major.equals("computer_science_applied_computing")){
+            courseTitle = new JLabel(degreeNames.get(2));
+            courseTitle.setForeground(new Color(255, 199, 0));
+            courseTitle.setFont(new Font("Arial", Font.BOLD, 25));
+            courseTitle.setBounds(85, 25, courseTitle.getMaximumSize().width, courseTitle.getMaximumSize().height);
+            panel2.add(courseTitle);
+        }
+        else if(major.equals("computer_science_information_systems")){
+            courseTitle = new JLabel(degreeNames.get(3));
+            courseTitle.setForeground(new Color(255, 199, 0));
+            courseTitle.setFont(new Font("Arial", Font.BOLD, 25));
+            courseTitle.setBounds(85, 25, courseTitle.getMaximumSize().width, courseTitle.getMaximumSize().height);
+            panel2.add(courseTitle);
+        }
+        else if(major.equals("computer_science_software_engineering")){
+            courseTitle = new JLabel(degreeNames.get(4));
+            courseTitle.setForeground(new Color(255, 199, 0));
+            courseTitle.setFont(new Font("Arial", Font.BOLD, 21));
+            courseTitle.setBounds(70, 25, courseTitle.getMaximumSize().width, courseTitle.getMaximumSize().height);
+            panel2.add(courseTitle);
+        }
+
         for (int i = 0; i < courses.size(); i += 2) {
             course = courses.get(i) + " " + courses.get(i + 1);
             y = y + 25;
             label2 = new JLabel(course);
             label2.setForeground(new Color(255, 203, 0));
             label2.setFont(new Font("Arial", Font.PLAIN, 15));
-            label2.setBounds(50, y, label2.getMaximumSize().width, label2.getMaximumSize().height);
+            label2.setBounds(85, y, label2.getMaximumSize().width, label2.getMaximumSize().height);
             courseLabels.add(label2);
             panel2.add(label2);
         }
         for (int i = 0; i < courseLabels.size(); i++) {
             courseLabels.get(i).addMouseListener(this);
         }
+        electiveButton = new KButton();
+        electiveButton.setBounds(750, 80, 100, 50); // set the button bounds
+        electiveButton.setFont(new Font("Arial Black", Font.PLAIN, 15));
+        electiveButton.setText("electives");
+        electiveButton.addActionListener(this);
+        electiveButton.setFocusable(true);
+        electiveButton.setkBackGroundColor(new Color(255, 203, 0));
+        electiveButton.setkBorderRadius(0);
+        electiveButton.setkBackGroundColor(new Color(255, 203, 0));
+        electiveButton.setkStartColor(new Color(255, 203, 0));
+        electiveButton.setkEndColor(new Color(255, 203, 0));
+        electiveButton.setkForeGround(Color.BLACK);
+        electiveButton.setkHoverForeGround(new Color(255, 203, 0));
+        electiveButton.setkHoverEndColor(new Color(255, 203, 0));
+        electiveButton.setkHoverColor(new Color(255, 203, 0));
+        electiveButton.setkHoverStartColor(new Color(255, 203, 0));
+        electiveButton.setBorder(BorderFactory.createEtchedBorder());
+        panel2.add(electiveButton);
 
         button = new JButton("<-");
         button.setBounds(10, 10, 50, 30);
         button.setBackground(new Color(255, 203, 0));
         button.setFocusPainted(true);
         button.setFont(new Font("Arial", Font.PLAIN, 10));
+        button.setBorder(BorderFactory.createEtchedBorder());
         button.addActionListener(this);
         panel2.add(button);
         picLabel.setBounds(750, 550, 200, 200);
@@ -243,14 +302,26 @@ public class gui extends Main implements ActionListener, MouseListener {
         panel3.setBackground(new Color(17, 44, 80));
         panel3.setLayout(null);
         panel3.setVisible(true);
-        System.out.println(getInfoOnCourse(major).toString());
         button1 = new JButton("<-");
         button1.setBounds(10, 10, 50, 30);
         button1.setBackground(new Color(255, 203, 0));
+        button1.setBorder(BorderFactory.createEtchedBorder());
         button1.setFocusPainted(true);
         button1.setFont(new Font("Arial", Font.PLAIN, 10));
         button1.addActionListener(this);
         panel3.add(button1);
+//        if(major.equals("computer_science_general")) {
+//            if (label4.getText().equals("STAT-2910 or STAT-2920 Statistics for the Sciences or  Introduction to Probability\n")) {
+//                courseInfoTitle = new JLabel("STAT-2910");
+//                courseInfoTitle.setForeground(new Color(255, 203, 0));
+//                courseInfoTitle.setFont(new Font("Lucida Blackletter", Font.PLAIN, 22));
+//                courseInfoTitle.setBounds(110, 50, courseInfoTitle.getMaximumSize().width, courseInfoTitle.getMaximumSize().height);
+//            }
+//        }
+            courseInfoTitle = new JLabel(label4.getText());
+            courseInfoTitle.setForeground(new Color(255, 203, 0));
+            courseInfoTitle.setFont(new Font("Lucida Blackletter", Font.PLAIN, 22));
+            courseInfoTitle.setBounds(110, 50, courseInfoTitle.getMaximumSize().width, courseInfoTitle.getMaximumSize().height);
         if(label4.getText().substring(0,9).equals("MATH-1720")){
             extraTitle1 = new JLabel("MATH-1720");
             extraTitle1.setForeground(new Color(255, 203, 0));
@@ -305,6 +376,24 @@ public class gui extends Main implements ActionListener, MouseListener {
                 panel3.add(extraTitle1);
                 panel3.add(extraTitle2);
             }
+                if(label4.getText().substring(0,9).equals("COMP-4990")){
+                    courseInfoTitle.setBounds(50, 50, courseInfoTitle.getMaximumSize().width, courseInfoTitle.getMaximumSize().height);
+                    extraTitle1 = new JLabel("COMP-4990");
+                    extraTitle1.setForeground(new Color(255, 203, 0));
+                    extraTitle1.setFont(new Font("Arial", Font.PLAIN, 18));
+                    extraTitle1.setBounds(110, 100, 200, 100);
+                    extraInfo = new JLabel("<html>" + infoOnCourses.get("COMP-4960") + "</html>");
+                    extraInfo.setForeground(new Color(255, 203, 0));
+                    extraInfo.setFont(new Font("Arial", Font.PLAIN, 18));
+                    extraInfo.setBounds(110, 280, 700, 600);
+                    extraTitle2 = new JLabel("COMP-4960");
+                    extraTitle2.setForeground(new Color(255, 203, 0));
+                    extraTitle2.setFont(new Font("Arial", Font.PLAIN, 18));
+                    extraTitle2.setBounds(110, 405, 200, 100);
+                    panel3.add(extraInfo);
+                    panel3.add(extraTitle1);
+                    panel3.add(extraTitle2);
+                }
         }
 
         info = new JLabel("<html>" + infoOnCourses.get(label4.getText().substring(0, 9)) + "</html>");
@@ -312,10 +401,6 @@ public class gui extends Main implements ActionListener, MouseListener {
         info.setFont(new Font("Arial", Font.PLAIN, 18));
         info.setBounds(110, 60, 600, 400);
         panel3.add(info);
-        courseInfoTitle = new JLabel(label4.getText());
-        courseInfoTitle.setForeground(new Color(255, 203, 0));
-        courseInfoTitle.setFont(new Font("Lucida Blackletter", Font.PLAIN, 22));
-        courseInfoTitle.setBounds(110, 50, courseInfoTitle.getMaximumSize().width, courseInfoTitle.getMaximumSize().height);
         panel3.add(courseInfoTitle);
         picLabel.setBounds(750, 550, 200, 200);
         panel3.add(picLabel);
@@ -323,6 +408,39 @@ public class gui extends Main implements ActionListener, MouseListener {
 
         frame.add(panel3);
 
+
+    }
+
+    public void makePanel4() throws Exception {
+        int y = 70;
+        ArrayList<String> electives = getElectives(major);
+        panel4 = new JPanel();
+        panel4.setBounds(0, 0, WIDTH, HEIGHT);
+        panel4.setBackground(new Color(17, 44, 80));
+        panel4.setLayout(null);
+        panel4.setVisible(true);
+
+        button2 = new JButton("<-");
+        button2.setBounds(10, 10, 50, 30);
+        button2.setBackground(new Color(255, 203, 0));
+        button2.setBorder(BorderFactory.createEtchedBorder());
+        button2.setFocusPainted(true);
+        button2.setFont(new Font("Arial", Font.PLAIN, 10));
+        button2.addActionListener(this);
+        panel4.add(button2);
+
+//        electiveTitle = new JLabel("");
+//        electiveTitle.
+        System.out.println(electives.get(0));
+        for(int i = 0 ; i<electives.size(); i+=2){
+            electiveLabel = new JLabel(electives.get(i) + " " + electives.get(i+1));
+            electiveLabel.setForeground(new Color(255, 203, 0));
+            electiveLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+            electiveLabel.setBounds(40, y, electiveLabel.getMaximumSize().width,  electiveLabel.getMaximumSize().height);
+            y = y + 25;
+            panel4.add(electiveLabel);
+        }
+        frame.add(panel4);
 
     }
 
@@ -344,6 +462,24 @@ public class gui extends Main implements ActionListener, MouseListener {
                 panel3.setVisible(false);
                 frame.remove(panel3);
                 makePanel2(major);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+        if(e.getSource() == button2){
+            panel4.setVisible(false);
+            frame.remove(panel4);
+            try {
+                makePanel2(major);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+        if(e.getSource() == electiveButton){
+            panel2.setVisible(false);
+            frame.remove(panel2);
+            try {
+                makePanel4();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -377,9 +513,9 @@ public class gui extends Main implements ActionListener, MouseListener {
         if (degrees.size() < 5) {
             degrees.add("computer_science_general");
             degrees.add("computer_science_honours");
-            degrees.add("computer_science_software_engineering");
-            degrees.add("computer_science_information_systems");
             degrees.add("computer_science_applied_computing");
+            degrees.add("computer_science_information_systems");
+            degrees.add("computer_science_software_engineering");
         }
         degreeNames.add("Bachelor of Computer Science (General)");
         degreeNames.add("Bachelor of Computer Science (Honours)");
