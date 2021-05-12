@@ -42,6 +42,22 @@ public class Main {
         return null;
     }
 
+    public static ArrayList<String> getSpecialization(String table) throws Exception{
+       table = "specializations";
+        try {
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT part1, part2 FROM " + table);
+            ResultSet result = statement.executeQuery();
+            ArrayList<String> array = new ArrayList<String>();
+            while(result.next()){
+                array.add(result.getString("part1"));
+                array.add(result.getString("part2"));
+            }
+            return array;
+        } catch(Exception e) { System.out.println(e); }
+        return null;
+    }
+
     //electives
     public static ArrayList<String> getElectives(String table) throws Exception{
         try {

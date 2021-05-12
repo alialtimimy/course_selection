@@ -22,12 +22,12 @@ import java.util.HashMap;
 
 public class gui extends Main implements ActionListener, MouseListener {
     private static JFrame frame;
-    private static JLabel label, info,courseInfoTitle,enter, errorMessage, css, css1, css2, generalDegree, honoursDegree, picLabel, picLabel1, picLabel2, picLabel3, picLabel4, picLabel5, electiveLabel;
+    private static JLabel label, info,courseInfoTitle,specialization1, enter, errorMessage, css, css1, css2, specializations, generalDegree, honoursDegree, picLabel, picLabel1, picLabel2, picLabel3, picLabel4, picLabel5, electiveLabel;
     private static ArrayList<JLabel> array;
     private JLabel[] jLabelArr = new JLabel[3];
     private JLabel[] jLabelArr1 = new JLabel[100];
-    private static JPanel panel1, panel2, panel3, panel4;
-    private static JButton button, button1, button2;
+    private static JPanel panel1, panel2, panel3, panel4, panel5;
+    private static JButton button, button1, button2,button4;
     private static String major = "";
     private static ArrayList<String> degrees = new ArrayList<String>();
     private static final int WIDTH = 1000;
@@ -36,8 +36,10 @@ public class gui extends Main implements ActionListener, MouseListener {
     private ArrayList<String> courses;
     private static ArrayList<JLabel> courseLabels;
     private static ArrayList<String> degreeNames = new ArrayList<String>();
+    private static ArrayList<String> specializationArray;
+
     private HashMap<String, String> infoOnCourses;
-    private KButton electiveButton;
+    private KButton electiveButton, button3;
 
 
     public gui() {
@@ -253,6 +255,27 @@ public class gui extends Main implements ActionListener, MouseListener {
         panel2.add(button);
         picLabel.setBounds(750, 550, 200, 200);
         panel2.add(picLabel);
+        System.out.println(major);
+        if(!major.equals("Bachelor of Science (Honours Computer Science with Software Engineering Specialization)")){
+            button3 = new KButton();
+            button3.setBounds(680, 300, 200, 50); // set the button bounds
+            button3.setFont(new Font("Arial Black", Font.PLAIN, 15));
+            button3.setText("Specializations");
+            button3.addActionListener(this);
+            button3.setFocusable(true);
+            button3.setkBackGroundColor(new Color(255, 203, 0));
+            button3.setkBorderRadius(0);
+            button3.setkBackGroundColor(new Color(255, 203, 0));
+            button3.setkStartColor(new Color(255, 203, 0));
+            button3.setkEndColor(new Color(255, 203, 0));
+            button3.setkForeGround(Color.BLACK);
+            button3.setkHoverForeGround(new Color(255, 203, 0));
+            button3.setkHoverEndColor(new Color(255, 203, 0));
+            button3.setkHoverColor(new Color(255, 203, 0));
+            button3.setkHoverStartColor(new Color(255, 203, 0));
+            button3.setBorder(BorderFactory.createEtchedBorder());
+            panel2.add(button3);
+        }
         frame.add(panel2);
     }
 
@@ -403,6 +426,44 @@ public class gui extends Main implements ActionListener, MouseListener {
 
     }
 
+    public void makePanel5() throws Exception {
+        panel5 = new JPanel();
+        panel5.setBounds(0, 0, WIDTH, HEIGHT);
+        panel5.setBackground(new Color(17, 44, 80));
+        panel5.setLayout(null);
+        panel5.setVisible(true);
+
+        specializationArray = getSpecialization(major);
+        button4 = new JButton("<-");
+        button4.setBounds(10, 10, 50, 30);
+        button4.setBackground(new Color(255, 203, 0));
+        button4.setBorder(BorderFactory.createEtchedBorder());
+        button4.setFocusPainted(true);
+        button4.setFont(new Font("Arial", Font.PLAIN, 10));
+        button4.addActionListener(this);
+        panel5.add(button4);
+
+
+        specialization1 = new JLabel("Students may specialize in one of the following areas. A special annotation will be made on the transcript for a specialization in one of the following areas, if the specified courses are completed:");
+        specialization1.setBounds(40, 20, 1000,  100);
+        specialization1.setForeground(new Color(255, 203, 0));
+        specialization1.setFont(new Font("Arial", Font.PLAIN, 15));
+        panel5.add(specialization1);
+
+
+        int y = 70;
+
+        for(int i = 0; i<specializationArray.size(); i++){
+            y = y + 25;
+            specializations = new JLabel(specializationArray.get(i));
+            specializations.setForeground(new Color(255, 203, 0));
+            specializations.setFont(new Font("Arial", Font.PLAIN, 15));
+            specializations.setBounds(40, y, 1000,  100);
+            panel5.add(specializations);
+        }
+        frame.add(panel5);
+    }
+
 
     public void actionPerformed(ActionEvent e) {
         //add true and false statement
@@ -443,7 +504,24 @@ public class gui extends Main implements ActionListener, MouseListener {
                 exception.printStackTrace();
             }
         }
-        //when the user enters his major:
+        if(e.getSource() == button3){
+            panel2.setVisible(false);
+            frame.remove(panel2);
+            try{
+                makePanel5();
+            }catch(Exception exception1){
+                exception1.printStackTrace();
+            }
+        }
+        if(e.getSource() == button4){
+            panel5.setVisible(false);
+            frame.remove(panel5);
+            try{
+                makePanel2(major);
+            }catch (Exception exception){
+                exception.printStackTrace();
+            }
+        }
     }
 
     public void addDegree() {
@@ -484,7 +562,6 @@ public class gui extends Main implements ActionListener, MouseListener {
         for (int i = 0; i < 3; i++) {
             if (e.getSource() == jLabelArr[i]) {
                 major = jLabelArr[i].getText();
-                System.out.println(major);
                 try {
                     if (get(major) != null) {
                         panel1.setVisible(false);
@@ -498,7 +575,6 @@ public class gui extends Main implements ActionListener, MouseListener {
         }
         if(e.getSource() == generalDegree){
             major = generalDegree.getText();
-            System.out.println(major);
             try {
                 if (get(major) != null) {
                     panel1.setVisible(false);
