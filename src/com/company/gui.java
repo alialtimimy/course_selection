@@ -26,8 +26,8 @@ public class gui extends Main implements ActionListener, MouseListener {
     private static ArrayList<JLabel> array;
     private JLabel[] jLabelArr = new JLabel[3];
     private JLabel[] jLabelArr1 = new JLabel[100];
-    private static JPanel panel1, panel2, panel3, panel4, panel5;
-    private static JButton button, button1, button2,button4;
+    private static JPanel panel1, panel2, panel3, panel4, panel5, schedulePanel;
+    private static JButton button, button1, button2,button4, returnButtonSchedule;
     private static String major = "";
     private static ArrayList<String> degrees = new ArrayList<String>();
     private static final int WIDTH = 1000;
@@ -39,7 +39,7 @@ public class gui extends Main implements ActionListener, MouseListener {
     private static ArrayList<String> specializationArray;
 
     private HashMap<String, String> infoOnCourses;
-    private KButton electiveButton, button3;
+    private KButton electiveButton, button3,scheduleButton;
 
 
     public gui() {
@@ -255,7 +255,6 @@ public class gui extends Main implements ActionListener, MouseListener {
         panel2.add(button);
         picLabel.setBounds(750, 550, 200, 200);
         panel2.add(picLabel);
-        System.out.println(major);
         if(!major.equals("Bachelor of Science (Honours Computer Science with Software Engineering Specialization)")){
             button3 = new KButton();
             button3.setBounds(680, 300, 200, 50); // set the button bounds
@@ -276,6 +275,24 @@ public class gui extends Main implements ActionListener, MouseListener {
             button3.setBorder(BorderFactory.createEtchedBorder());
             panel2.add(button3);
         }
+        scheduleButton = new KButton();
+        scheduleButton.setBounds(680, 500, 200, 50); // set the button bounds
+        scheduleButton.setFont(new Font("Arial Black", Font.PLAIN, 15));
+        scheduleButton.setText("Create Schedule");
+        scheduleButton.addActionListener(this);
+        scheduleButton.setFocusable(true);
+        scheduleButton.setkBackGroundColor(new Color(255, 203, 0));
+        scheduleButton.setkBorderRadius(0);
+        scheduleButton.setkBackGroundColor(new Color(255, 203, 0));
+        scheduleButton.setkStartColor(new Color(255, 203, 0));
+        scheduleButton.setkEndColor(new Color(255, 203, 0));
+        scheduleButton.setkForeGround(Color.BLACK);
+        scheduleButton.setkHoverForeGround(new Color(255, 203, 0));
+        scheduleButton.setkHoverEndColor(new Color(255, 203, 0));
+        scheduleButton.setkHoverColor(new Color(255, 203, 0));
+        scheduleButton.setkHoverStartColor(new Color(255, 203, 0));
+        scheduleButton.setBorder(BorderFactory.createEtchedBorder());
+        panel2.add(scheduleButton);
         frame.add(panel2);
     }
 
@@ -284,8 +301,15 @@ public class gui extends Main implements ActionListener, MouseListener {
         JLabel extraTitle1;
         JLabel extraTitle2;
         panel3 = new JPanel();
+        System.out.println(label4.getText());
         String temp = "";
-        infoOnCourses = getInfoOnCourse(major);
+        if(major.equals("Bachelor of Science (Honours Computer Information Systems)")){
+            infoOnCourses = getInfoOnCourseInformationSystems(major);
+        }
+        else {
+            infoOnCourses = getInfoOnCourse(major);
+        }
+
         panel3.setBounds(0, 0, WIDTH, HEIGHT);
         panel3.setBackground(new Color(17, 44, 80));
         panel3.setLayout(null);
@@ -298,14 +322,7 @@ public class gui extends Main implements ActionListener, MouseListener {
         button1.setFont(new Font("Arial", Font.PLAIN, 10));
         button1.addActionListener(this);
         panel3.add(button1);
-//        if(major.equals("computer_science_general")) {
-//            if (label4.getText().equals("STAT-2910 or STAT-2920 Statistics for the Sciences or  Introduction to Probability\n")) {
-//                courseInfoTitle = new JLabel("STAT-2910");
-//                courseInfoTitle.setForeground(new Color(255, 203, 0));
-//                courseInfoTitle.setFont(new Font("Lucida Blackletter", Font.PLAIN, 22));
-//                courseInfoTitle.setBounds(110, 50, courseInfoTitle.getMaximumSize().width, courseInfoTitle.getMaximumSize().height);
-//            }
-//        }
+
             courseInfoTitle = new JLabel(label4.getText());
             courseInfoTitle.setForeground(new Color(255, 203, 0));
             courseInfoTitle.setFont(new Font("Lucida Blackletter", Font.PLAIN, 22));
@@ -345,7 +362,6 @@ public class gui extends Main implements ActionListener, MouseListener {
             panel3.add(extraTitle1);
             panel3.add(extraTitle2);
         }
-
         if(major.equals("computer_science_honours")){
                 if(label4.getText().substring(0,9).equals("STAT-2910")) {
                 extraTitle1 = new JLabel("STAT-2910");
@@ -395,7 +411,11 @@ public class gui extends Main implements ActionListener, MouseListener {
     }
 
     public void makePanel4() throws Exception {
-        int y = 70;
+        JLabel electiveLabelTitle = new JLabel("Electives");
+        electiveLabelTitle.setForeground(new Color(255, 203, 0));
+        electiveLabelTitle.setFont(new Font("Arial", Font.BOLD, 25));
+        electiveLabelTitle.setBounds(70, 35, electiveLabelTitle.getMaximumSize().width,  electiveLabelTitle.getMaximumSize().height);
+        int y = 80;
         ArrayList<String> electives = getElectives(major);
         panel4 = new JPanel();
         panel4.setBounds(0, 0, WIDTH, HEIGHT);
@@ -418,14 +438,17 @@ public class gui extends Main implements ActionListener, MouseListener {
             electiveLabel = new JLabel(electives.get(i) + " " + electives.get(i+1));
             electiveLabel.setForeground(new Color(255, 203, 0));
             electiveLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-            electiveLabel.setBounds(40, y, electiveLabel.getMaximumSize().width,  electiveLabel.getMaximumSize().height);
+            electiveLabel.setBounds(70, y, electiveLabel.getMaximumSize().width,  electiveLabel.getMaximumSize().height);
             y = y + 25;
             panel4.add(electiveLabel);
         }
+        panel4.add(electiveLabelTitle);
         frame.add(panel4);
 
     }
 
+
+    //creates specialization panel
     public void makePanel5() throws Exception {
         panel5 = new JPanel();
         panel5.setBounds(0, 0, WIDTH, HEIGHT);
@@ -458,10 +481,32 @@ public class gui extends Main implements ActionListener, MouseListener {
             specializations = new JLabel(specializationArray.get(i));
             specializations.setForeground(new Color(255, 203, 0));
             specializations.setFont(new Font("Arial", Font.PLAIN, 15));
-            specializations.setBounds(40, y, 1000,  100);
+            specializations.setBounds(5, y, 1000,  100);
             panel5.add(specializations);
         }
         frame.add(panel5);
+    }
+
+    public void makeSchedulePanel() throws Exception{
+        schedulePanel = new JPanel();
+        schedulePanel.setBounds(0, 0, WIDTH, HEIGHT);
+        schedulePanel.setBackground(new Color(17, 44, 80));
+        schedulePanel.setLayout(null);
+        schedulePanel.setVisible(true);
+
+        returnButtonSchedule = new JButton("<-");
+        returnButtonSchedule.setBounds(10, 10, 50, 30);
+        returnButtonSchedule.setBackground(new Color(255, 203, 0));
+        returnButtonSchedule.setBorder(BorderFactory.createEtchedBorder());
+        returnButtonSchedule.setFocusPainted(true);
+        returnButtonSchedule.setFont(new Font("Arial", Font.PLAIN, 10));
+        returnButtonSchedule.addActionListener(this);
+        schedulePanel.add(returnButtonSchedule);
+        
+
+
+
+        frame.add(schedulePanel);
     }
 
 
@@ -516,6 +561,24 @@ public class gui extends Main implements ActionListener, MouseListener {
         if(e.getSource() == button4){
             panel5.setVisible(false);
             frame.remove(panel5);
+            try{
+                makePanel2(major);
+            }catch (Exception exception){
+                exception.printStackTrace();
+            }
+        }
+        if(e.getSource() == scheduleButton){
+            panel2.setVisible(false);
+            frame.remove(panel2);
+            try{
+                makeSchedulePanel();
+            }catch (Exception exception){
+                exception.printStackTrace();
+            }
+        }
+        if (e.getSource() == returnButtonSchedule) {
+            schedulePanel.setVisible(false);
+            frame.remove(schedulePanel);
             try{
                 makePanel2(major);
             }catch (Exception exception){
@@ -588,7 +651,6 @@ public class gui extends Main implements ActionListener, MouseListener {
         }
         if(e.getSource() == honoursDegree){
             major = honoursDegree.getText();
-            System.out.println(major);
 
             try {
                 if (get(major) != null) {

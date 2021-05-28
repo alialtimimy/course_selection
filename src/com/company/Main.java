@@ -1,5 +1,7 @@
 package com.company;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -34,8 +36,8 @@ public class Main {
             ResultSet result = statement.executeQuery();
             ArrayList<String> array = new ArrayList<String>();
             while(result.next()){
-                array.add(result.getString("course_code"));
-                array.add(result.getString("course_name"));
+                array.add(result.getString("course_code").trim());
+                array.add(result.getString("course_name").trim());
             }
             return array;
         } catch(Exception e) { System.out.println(e); }
@@ -90,6 +92,25 @@ public class Main {
         return null;
     }
 
+    public static HashMap getInfoOnCourseInformationSystems(String table) throws Exception{
+        HashMap<String, String> map = new HashMap<String, String>();
+        try {
+            if(table.equals("Bachelor of Science (Honours Computer Information Systems)")){
+                table = "course_info_information";
+            }
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT ID, course_code, info FROM " + table);
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+
+                map.put(result.getString("course_code"), result.getString("info"));
+            }
+            return map;
+        } catch(Exception e) { System.out.println(e); }
+        return null;
+
+    }
+
     public static HashMap getInfoOnCourse(String table) throws Exception{
         HashMap<String, String> map = new HashMap<String, String>();
         try {
@@ -102,28 +123,10 @@ public class Main {
             else if(table.equals("Bachelor of Science (Honours Computer Science with Software Engineering Specialization)")){
                 table = "course_info_software";
             }
-            else if(table.equals("Bachelor of Science (Honours Computer Information Systems)")){
-                table = "course_info_information";
-            }
             else if(table.equals("Bachelor of Computer Science (Honours Applied Computing)")){
                 table = "course_info_applied";
             }
 
-            if(table.equals("computer_science_general")){
-                table = "course_info_general";
-            }
-            else if(table.equals("computer_science_honours")){
-                table = "course_info_honours";
-            }
-            else if(table.equals("computer_science_applied_computing")){
-                table = "course_info_applied";
-            }
-            else if(table.equals("computer_science_software_engineering")){
-                table = "course_info_software";
-            }
-            else if(table.equals("computer_science_information_systems")){
-                table = "course_info_information";
-            }
             Connection con = getConnection();
             PreparedStatement statement = con.prepareStatement("SELECT course_code, info FROM " + table);
             ResultSet result = statement.executeQuery();
