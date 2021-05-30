@@ -11,6 +11,7 @@ import javax.imageio.plugins.jpeg.JPEGQTable;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -29,21 +30,21 @@ public class gui extends Main implements ActionListener, MouseListener {
     private JLabel[] jLabelArr = new JLabel[3];
     private JLabel[] jLabelArr1 = new JLabel[100];
     private static JPanel panel1, panel2, panel3, panel4, panel5, schedulePanel;
-    private static JButton button, button1, button2, button4, returnButtonSchedule;
     private static String major = "";
     private static ArrayList<String> degrees = new ArrayList<String>();
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 800;
+    private static int easyElectiveIndex, requiredElectiveIndex;
     private BufferedImage myPicture, myPicture1, myPicture2, myPicture3, myPicture4, myPicture5;
     private ArrayList<String> courses;
     private static ArrayList<JLabel> courseLabels;
     private static ArrayList<String> degreeNames = new ArrayList<String>();
-    private static ArrayList<String> specializationArray;
+    private static ArrayList<String> specializationArray, easyElectives, requiredElectives;
     private static JTable table1, table2, table3, table4;
-    private static String elective, elective1, elective2, elective3, elective4, elective5, elective6, elective7, elective8;
-
+    private static Object[][] data;
+    private static String[] columnNames;
     private HashMap<String, String> infoOnCourses;
-    private KButton electiveButton, button3, scheduleButton;
+    private KButton electiveButton, button3, scheduleButton, button4, returnButtonSchedule, button2, button1, button;
 
 
     public gui() {
@@ -243,13 +244,24 @@ public class gui extends Main implements ActionListener, MouseListener {
         electiveButton.setBorder(BorderFactory.createEtchedBorder());
         panel2.add(electiveButton);
 
-        button = new JButton("<-");
+        button = new KButton();
         button.setBounds(10, 10, 50, 30);
-        button.setBackground(new Color(255, 203, 0));
-        button.setFocusPainted(true);
-        button.setFont(new Font("Arial", Font.PLAIN, 10));
-        button.setBorder(BorderFactory.createEtchedBorder());
+        button.setFont(new Font("Arial Black", Font.PLAIN, 15));
+        button.setText("<-");
         button.addActionListener(this);
+        button.setFocusable(true);
+        button.setkBackGroundColor(new Color(255, 203, 0));
+        button.setkBorderRadius(0);
+        button.setkBackGroundColor(new Color(255, 203, 0));
+        button.setkStartColor(new Color(255, 203, 0));
+        button.setkEndColor(new Color(255, 203, 0));
+        button.setkForeGround(Color.BLACK);
+        button.setkHoverForeGround(new Color(255, 203, 0));
+        button.setkHoverEndColor(new Color(255, 203, 0));
+        button.setkHoverColor(new Color(255, 203, 0));
+        button.setkHoverStartColor(new Color(255, 203, 0));
+        button.setBorder(BorderFactory.createEtchedBorder());
+
         panel2.add(button);
         picLabel.setBounds(750, 550, 200, 200);
         panel2.add(picLabel);
@@ -311,13 +323,26 @@ public class gui extends Main implements ActionListener, MouseListener {
         panel3.setBackground(new Color(17, 44, 80));
         panel3.setLayout(null);
         panel3.setVisible(true);
-        button1 = new JButton("<-");
+
+
+        button1 = new KButton();
         button1.setBounds(10, 10, 50, 30);
-        button1.setBackground(new Color(255, 203, 0));
-        button1.setBorder(BorderFactory.createEtchedBorder());
-        button1.setFocusPainted(true);
-        button1.setFont(new Font("Arial", Font.PLAIN, 10));
+        button1.setFont(new Font("Arial Black", Font.PLAIN, 15));
+        button1.setText("<-");
         button1.addActionListener(this);
+        button1.setFocusable(true);
+        button1.setkBackGroundColor(new Color(255, 203, 0));
+        button1.setkBorderRadius(0);
+        button1.setkBackGroundColor(new Color(255, 203, 0));
+        button1.setkStartColor(new Color(255, 203, 0));
+        button1.setkEndColor(new Color(255, 203, 0));
+        button1.setkForeGround(Color.BLACK);
+        button1.setkHoverForeGround(new Color(255, 203, 0));
+        button1.setkHoverEndColor(new Color(255, 203, 0));
+        button1.setkHoverColor(new Color(255, 203, 0));
+        button1.setkHoverStartColor(new Color(255, 203, 0));
+        button1.setBorder(BorderFactory.createEtchedBorder());
+
         panel3.add(button1);
         courseInfoTitle = new JLabel(label4.getText());
         courseInfoTitle.setForeground(new Color(255, 203, 0));
@@ -375,7 +400,7 @@ public class gui extends Main implements ActionListener, MouseListener {
                 panel3.add(extraTitle1);
                 panel3.add(extraTitle2);
             }
-            if(label4.getText().substring(0, 9).equals("MATH-3940")){
+            if (label4.getText().substring(0, 9).equals("MATH-3940")) {
                 courseInfoTitle.setBounds(55, 65, courseInfoTitle.getMaximumSize().width, courseInfoTitle.getMaximumSize().height);
                 extraTitle1 = new JLabel("MATH-3940");
                 extraTitle1.setForeground(new Color(255, 203, 0));
@@ -395,7 +420,7 @@ public class gui extends Main implements ActionListener, MouseListener {
 
             }
         }
-        if(major.equals("Bachelor of Computer Science (Honours)") || major.equals("Bachelor of Science (Honours Computer Science with Software Engineering Specialization)")) {
+        if (major.equals("Bachelor of Computer Science (Honours)") || major.equals("Bachelor of Science (Honours Computer Science with Software Engineering Specialization)")) {
             if (label4.getText().substring(0, 9).equals("COMP-4990")) {
                 courseInfoTitle.setBounds(50, 50, courseInfoTitle.getMaximumSize().width, courseInfoTitle.getMaximumSize().height);
                 extraTitle1 = new JLabel("COMP-4990");
@@ -419,10 +444,9 @@ public class gui extends Main implements ActionListener, MouseListener {
         info = new JLabel("<html>" + infoOnCourses.get(label4.getText().substring(0, 9)) + "</html>");
         info.setForeground(new Color(255, 203, 0));
         info.setFont(new Font("Arial", Font.PLAIN, 18));
-        if(flag) {
+        if (flag) {
             info.setBounds(50, 60, 600, 400);
-        }
-        else{
+        } else {
             info.setBounds(110, 60, 600, 400);
         }
         panel3.add(info);
@@ -435,9 +459,9 @@ public class gui extends Main implements ActionListener, MouseListener {
     public void makePanel4() throws Exception {
         JLabel electiveLabelTitle = new JLabel("Electives");
         electiveLabelTitle.setForeground(new Color(255, 203, 0));
-        electiveLabelTitle.setFont(new Font("Arial", Font.BOLD, 25));
-        electiveLabelTitle.setBounds(70, 35, electiveLabelTitle.getMaximumSize().width, electiveLabelTitle.getMaximumSize().height);
-        int y = 80;
+        electiveLabelTitle.setFont(new Font("Arial", Font.BOLD, 18));
+        electiveLabelTitle.setBounds(10, 65, electiveLabelTitle.getMaximumSize().width, electiveLabelTitle.getMaximumSize().height);
+        int y = 100;
         ArrayList<String> electives = getElectives(major);
         panel4 = new JPanel();
         panel4.setBounds(0, 0, WIDTH, HEIGHT);
@@ -445,22 +469,31 @@ public class gui extends Main implements ActionListener, MouseListener {
         panel4.setLayout(null);
         panel4.setVisible(true);
 
-        button2 = new JButton("<-");
+
+        button2 = new KButton();
         button2.setBounds(10, 10, 50, 30);
-        button2.setBackground(new Color(255, 203, 0));
-        button2.setBorder(BorderFactory.createEtchedBorder());
-        button2.setFocusPainted(true);
-        button2.setFont(new Font("Arial", Font.PLAIN, 10));
+        button2.setFont(new Font("Arial Black", Font.PLAIN, 15));
+        button2.setText("<-");
         button2.addActionListener(this);
+        button2.setFocusable(true);
+        button2.setkBackGroundColor(new Color(255, 203, 0));
+        button2.setkBorderRadius(0);
+        button2.setkBackGroundColor(new Color(255, 203, 0));
+        button2.setkStartColor(new Color(255, 203, 0));
+        button2.setkEndColor(new Color(255, 203, 0));
+        button2.setkForeGround(Color.BLACK);
+        button2.setkHoverForeGround(new Color(255, 203, 0));
+        button2.setkHoverEndColor(new Color(255, 203, 0));
+        button2.setkHoverColor(new Color(255, 203, 0));
+        button2.setkHoverStartColor(new Color(255, 203, 0));
+        button2.setBorder(BorderFactory.createEtchedBorder());
         panel4.add(button2);
 
-//        electiveTitle = new JLabel("");
-//        electiveTitle.
         for (int i = 0; i < electives.size(); i += 2) {
-            electiveLabel = new JLabel(electives.get(i) + " " + electives.get(i + 1));
+            electiveLabel = new JLabel("<html>" + electives.get(i)+ " " + electives.get(i + 1) + "</html>");
             electiveLabel.setForeground(new Color(255, 203, 0));
             electiveLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-            electiveLabel.setBounds(70, y, electiveLabel.getMaximumSize().width, electiveLabel.getMaximumSize().height);
+            electiveLabel.setBounds(10, y,1000,100);
             y = y + 25;
             panel4.add(electiveLabel);
         }
@@ -479,28 +512,38 @@ public class gui extends Main implements ActionListener, MouseListener {
         panel5.setVisible(true);
 
         specializationArray = getSpecialization(major);
-        button4 = new JButton("<-");
+        button4 = new KButton();
         button4.setBounds(10, 10, 50, 30);
-        button4.setBackground(new Color(255, 203, 0));
-        button4.setBorder(BorderFactory.createEtchedBorder());
-        button4.setFocusPainted(true);
-        button4.setFont(new Font("Arial", Font.PLAIN, 10));
+        button4.setFont(new Font("Arial Black", Font.PLAIN, 15));
+        button4.setText("<-");
         button4.addActionListener(this);
+        button4.setFocusable(true);
+        button4.setkBackGroundColor(new Color(255, 203, 0));
+        button4.setkBorderRadius(0);
+        button4.setkBackGroundColor(new Color(255, 203, 0));
+        button4.setkStartColor(new Color(255, 203, 0));
+        button4.setkEndColor(new Color(255, 203, 0));
+        button4.setkForeGround(Color.BLACK);
+        button4.setkHoverForeGround(new Color(255, 203, 0));
+        button4.setkHoverEndColor(new Color(255, 203, 0));
+        button4.setkHoverColor(new Color(255, 203, 0));
+        button4.setkHoverStartColor(new Color(255, 203, 0));
+        button4.setBorder(BorderFactory.createEtchedBorder());
         panel5.add(button4);
 
 
-        specialization1 = new JLabel("Students may specialize in one of the following areas. A special annotation will be made on the transcript for a specialization in one of the following areas, if the specified courses are completed:");
+        specialization1 = new JLabel("<html>Students may specialize in one of the following areas. A special annotation will be made on the transcript for a specialization in one of the following areas, if the specified courses are completed:</html>");
         specialization1.setBounds(5, 20, 1000, 100);
         specialization1.setForeground(new Color(255, 203, 0));
-        specialization1.setFont(new Font("Arial", Font.PLAIN, 15));
+        specialization1.setFont(new Font("Arial", Font.BOLD, 18));
         panel5.add(specialization1);
 
 
-        int y = 70;
+        int y = 40;
 
         for (int i = 0; i < specializationArray.size(); i++) {
-            y = y + 25;
-            specializations = new JLabel(specializationArray.get(i));
+            y = y + 35;
+            specializations = new JLabel("<html>" + specializationArray.get(i)+"</html>");
             specializations.setForeground(new Color(255, 203, 0));
             specializations.setFont(new Font("Arial", Font.PLAIN, 15));
             specializations.setBounds(5, y, 1000, 100);
@@ -517,84 +560,124 @@ public class gui extends Main implements ActionListener, MouseListener {
         schedulePanel.setLayout(null);
         schedulePanel.setVisible(true);
 
-        returnButtonSchedule = new JButton("<-");
+        returnButtonSchedule = new KButton();
         returnButtonSchedule.setBounds(10, 10, 50, 30);
-        returnButtonSchedule.setBackground(new Color(255, 203, 0));
-        returnButtonSchedule.setBorder(BorderFactory.createEtchedBorder());
-        returnButtonSchedule.setFocusPainted(true);
-        returnButtonSchedule.setFont(new Font("Arial", Font.PLAIN, 10));
+        returnButtonSchedule.setFont(new Font("Arial Black", Font.PLAIN, 15));
+        returnButtonSchedule.setText("<-");
         returnButtonSchedule.addActionListener(this);
+        returnButtonSchedule.setFocusable(true);
+        returnButtonSchedule.setkBackGroundColor(new Color(255, 203, 0));
+        returnButtonSchedule.setkBorderRadius(0);
+        returnButtonSchedule.setkBackGroundColor(new Color(255, 203, 0));
+        returnButtonSchedule.setkStartColor(new Color(255, 203, 0));
+        returnButtonSchedule.setkEndColor(new Color(255, 203, 0));
+        returnButtonSchedule.setkForeGround(Color.BLACK);
+        returnButtonSchedule.setkHoverForeGround(new Color(255, 203, 0));
+        returnButtonSchedule.setkHoverEndColor(new Color(255, 203, 0));
+        returnButtonSchedule.setkHoverColor(new Color(255, 203, 0));
+        returnButtonSchedule.setkHoverStartColor(new Color(255, 203, 0));
+        returnButtonSchedule.setBorder(BorderFactory.createEtchedBorder());
         schedulePanel.add(returnButtonSchedule);
 
-        String[] columnNames = {"First Year", "hi", "hello", "monkee", "monkee1", "monkee2"};
 
-        Object[][] data = {
-                {"Semester 1", "COMP-1000", "COMP-1400", "MATH-1720", "MATH-1250", elective},
-                {"Semester 2", "COMP-1410", "MATH-1730", "MATH-1020", elective1, elective2},
-        };
-        JLabel year1 = new JLabel("First Year");
-        year1.setForeground(new Color(255, 203, 0));
-        year1.setFont(new Font("Arial", Font.PLAIN, 15));
-        year1.setBounds(15, 25, 100, 100);
-        schedulePanel.add(year1);
+        //computer science honours schedule
+        if(major.equals("Bachelor of Computer Science (Honours)")) {
+            columnNames = new String[]{"First Year", "hi", "hello", "monkee", "monkee1", "monkee2"};
+             data = new Object[][]{
+                     {"Semester 1", "COMP-1000", "COMP-1400", "MATH-1720", "MATH-1250", "elective"},
+                     {"Semester 2", "COMP-1410", "MATH-1730", "MATH-1020", "electives.get(1)", "elective"},
+                     {"Semester 3", "COMP-2560", "STAT-2910", "COMP-2120", "COMP-2310", "electives.get(0)"},
+                     {"Semester 4", "COMP-2540", "COMP-2660", "COMP-2140", "elective4", "elective5"},
+                     {"Semester 5", "COMP-3110", "COMP-3220", "COMP-3540", "COMP-3670", "elective6"},
+                     {"Semester 6", "COMP-3150", "COMP-3300", "MATH-3940", "elective7", "elective8"},
+                     {"Semester 7", "COMP-4400", "COMP-4540", "elective9", "elective10", "elective11"},
+                     {"Semester 8", "COMP-4990", "elective12", "elective13", "elective14", "elective15"},
+             };
+        }
+        else if(major.equals("Bachelor of Science (Honours Computer Science with Software Engineering Specialization)")){
+            columnNames = new String[]{"First Year", "hi", "hello", "monkee", "monkee1", "monkee2"};
+            data = new Object[][]{
+                    {"Semester 1", "COMP-1000", "COMP-1400", "MATH-1720", "MATH-1250", "elective"},
+                    {"Semester 2", "COMP-1410", "MATH-1730", "MATH-1020", "electives.get(1)", "electives.get(2)"},
+                    {"Semester 3", "COMP-2560", "STAT-2910", "COMP-2120", "COMP-2310", "electives.get(0)"},
+                    {"Semester 4", "COMP-2540", "COMP-2660", "COMP-2140", "elective4", "elective5"},
+                    {"Semester 5", "COMP-3110", "COMP-3220", "COMP-3540", "COMP-3670", "elective6"},
+                    {"Semester 6", "COMP-3150", "COMP-3300", "MATH-3940", "elective7", "elective8"},
+                    {"Semester 7", "COMP-4400", "COMP-4540", "elective9", "elective10", "elective11"},
+                    {"Semester 8", "COMP-4990", "elective12", "elective13", "elective14", "elective15"},
+            };
+
+        }
+        else if(major.equals("Bachelor of Computer Science (General)")){
+            columnNames = new String[]{"First Year", "hi", "hello", "monkee", "monkee1", "monkee2"};
+            data = new Object[][]{
+                    {"Semester 1", "COMP-1000", "COMP-1400", "MATH-1720", "MATH-1250", "elective"},
+                    {"Semester 2", "COMP-1410", "MATH-1730", "MATH-1020", "electives.get(1)", "electives.get(2)"},
+                    {"Semester 3", "COMP-2560", "STAT-2910", "COMP-2120", "COMP-2310", "electives.get(0)"},
+                    {"Semester 4", "COMP-2540", "COMP-2660", "COMP-2140", "elective4", "elective5"},
+                    {"Semester 5", "COMP-3110", "COMP-3220", "COMP-3540", "COMP-3670", "elective6"},
+                    {"Semester 6", "COMP-3150", "COMP-3300", "MATH-3940", "elective7", "elective8"},
+                    {"Semester 7", "COMP-4400", "COMP-4540", "elective9", "elective10", "elective11"},
+                    {"Semester 8", "COMP-4990", "elective12", "elective13", "elective14", "elective15"},
+            };
+        }
+        else if(major.equals("Bachelor of Computer Science (Honours Applied Computing)")){
+            columnNames = new String[]{"First Year", "hi", "hello", "monkee", "monkee1", "monkee2"};
+            data = new Object[][]{
+                    {"Semester 1", "COMP-1000", "COMP-1400", "MATH-1720", "MATH-1250", "elective"},
+                    {"Semester 2", "COMP-1410", "MATH-1730", "MATH-1020", "electives.get(1)", "electives.get(2)"},
+                    {"Semester 3", "COMP-2560", "STAT-2910", "COMP-2120", "COMP-2310", "electives.get(0)"},
+                    {"Semester 4", "COMP-2540", "COMP-2660", "COMP-2140", "elective4", "elective5"},
+                    {"Semester 5", "COMP-3110", "COMP-3220", "COMP-3540", "COMP-3670", "elective6"},
+                    {"Semester 6", "COMP-3150", "COMP-3300", "MATH-3940", "elective7", "elective8"},
+                    {"Semester 7", "COMP-4400", "COMP-4540", "elective9", "elective10", "elective11"},
+                    {"Semester 8", "COMP-4990", "elective12", "elective13", "elective14", "elective15"},
+            };
+        }
+        else if(major.equals("Bachelor of Science (Honours Computer Information Systems)")){
+            columnNames = new String[]{"First Year", "hi", "hello", "monkee", "monkee1", "monkee2"};
+            data = new Object[][]{
+                    {"Semester 1", "COMP-1000", "COMP-1400", "MATH-1720", "MATH-1250", "elective"},
+                    {"Semester 2", "COMP-1410", "MATH-1730", "MATH-1020", "electives.get(1)", "electives.get(2)"},
+                    {"Semester 3", "COMP-2560", "STAT-2910", "COMP-2120", "COMP-2310", "electives.get(0)"},
+                    {"Semester 4", "COMP-2540", "COMP-2660", "COMP-2140", "elective4", "elective5"},
+                    {"Semester 5", "COMP-3110", "COMP-3220", "COMP-3540", "COMP-3670", "elective6"},
+                    {"Semester 6", "COMP-3150", "COMP-3300", "MATH-3940", "elective7", "elective8"},
+                    {"Semester 7", "COMP-4400", "COMP-4540", "elective9", "elective10", "elective11"},
+                    {"Semester 8", "COMP-4990", "elective12", "elective13", "elective14", "elective15"},
+            };
+        }
+
+        JLabel scheduleTitle = new JLabel("Schedule:");
+        scheduleTitle.setBounds(400, 40, 350,50);
+        scheduleTitle.setFont(new Font("Arial", Font.BOLD, 21));
+        scheduleTitle.setForeground(new Color(255, 203, 0));
+        schedulePanel.add(scheduleTitle);
 
         table1 = new JTable(data, columnNames);
         table1.setPreferredScrollableViewportSize(new Dimension(800, 50));
         table1.setFillsViewportHeight(true);
-        table1.setFont(new Font("Arial", Font.PLAIN, 20));
-        table1.setBounds(100, 60, 800, 30);
-        table1.setBackground(new Color(255, 203, 0));
-        table1.setForeground(new Color(17, 44, 80));
+        table1.setFont(new Font("Arial", Font.BOLD, 18));
+        table1.setBounds(50, 90, 850, 128);
+        table1.setBackground(new Color(17, 44, 80));
+
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        table1.setModel(tableModel);
+
+
+        table1.setBorder(BorderFactory.createMatteBorder(1,1,1,1, new Color(255, 203, 0)));
+        table1.setForeground(new Color(255, 203, 0));
         schedulePanel.add(table1);
-
-        String[] columnNames1 = {"", "", "", "", "", ""};
-
-        Object[][] data1 = {
-                {"Semester 3", "COMP-2560", "STAT-2910", "COMP-2120", "COMP-2310", elective3},
-                {"Semester 4", "COMP-2540", "COMP-2660", "COMP-2140", elective4, elective5},
-        };
-
-        JLabel year2 = new JLabel("Second Year");
-        year2.setForeground(new Color(255, 203, 0));
-        year2.setFont(new Font("Arial", Font.PLAIN, 15));
-        year2.setBounds(10, 55, 100, 100);
-        schedulePanel.add(year2);
-
-        table2 = new JTable(data1, columnNames1);
-        table2.setPreferredScrollableViewportSize(new Dimension(800, 50));
-        table2.setFillsViewportHeight(true);
-        table2.setBounds(100, 95, 800, 30);
-        table2.setFont(new Font("Arial", Font.PLAIN, 20));
-        table2.setBackground(new Color(255, 203, 0));
-        table2.setForeground(new Color(17, 44, 80));
-        schedulePanel.add(table2);
-
-
-        String[] columnNames2 = {"", "", "", "", "", ""};
-
-        Object[][] data2 = {
-                {"Semester 5", "COMP-3110", "COMP-3220", "COMP-3540", "COMP-3670", elective6},
-                {"Semester 6", "COMP-3150", "COMP-3300", "MATH-3940", elective7, elective8},
-        };
-
-        JLabel year3 = new JLabel("Third Year");
-        year3.setForeground(new Color(255, 203, 0));
-        year3.setFont(new Font("Arial", Font.PLAIN, 15));
-        year3.setBounds(10, 85, 100, 100);
-        schedulePanel.add(year3);
-
-        table3 = new JTable(data2, columnNames2);
-        table3.setPreferredScrollableViewportSize(new Dimension(800, 50));
-        table3.setFillsViewportHeight(true);
-        table3.setBounds(100, 125, 800, 30);
-        table3.setFont(new Font("Arial", Font.PLAIN, 20));
-        table3.setBackground(new Color(255, 203, 0));
-        table3.setForeground(new Color(17, 44, 80));
-        schedulePanel.add(table3);
 
 
         frame.add(schedulePanel);
     }
+
 
 
     public void actionPerformed(ActionEvent e) {
